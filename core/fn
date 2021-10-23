@@ -6,7 +6,13 @@ ensure_config() {
   # load_config_file $PLUGIN_WORKSPACE_CONFIG
 }
 
-install_common() {
+initialize_config() {
+  zmicro config rc
+}
+
+initialize_common() {
+  initialize_config
+
   # @TODO
   plugin_load_mod ${PLUGIN_WORKSPACE_NAME}
 
@@ -21,7 +27,7 @@ install_common() {
   zmicro package install inlets
 }
 
-install_role() {
+initialize_role() {
   local role=$1
 
   zmicro config set ZWORKSPACE_ROLE $role
@@ -52,7 +58,7 @@ install_role() {
       zmicro package install python
       ;;
     *)
-      log_error "[zworkspace][install_role] unknown role: ${role}"
+      log_error "[zworkspace][initialize_role] unknown role: ${role}"
       exit 1
       ;;
   esac
@@ -61,7 +67,7 @@ install_role() {
 upgrade_role() {
   local role=$1
 
-  install_role $role
+  initialize_role $role
 
   zmicro package install inlets
 }
@@ -70,11 +76,11 @@ initialize() {
   local role=$1
   
   # 1. common
-  install_common
+  initialize_common
 
   # 2. developer role
   if [ -n "$role" ]; then
-    install_role $role
+    initialize_role $role
   fi
 }
 
@@ -86,9 +92,9 @@ upgrade() {
 
   local version=$(zmicro config get ZWORKSPACE_VERSION)
   if [ -z "$version" ]; then
-    install_common
+    initialize_common
   elif [ "$version" != "$PLUGIN_VERSION" ]; then
-    install_common
+    initialize_common
   fi
 
   if [ -z "$role" ]; then
@@ -103,9 +109,11 @@ upgrade() {
 }
 
 export -f ensure_config
-export -f install_common
 
-export -f install_role
+export -f initialize_config
+export -f initialize_common
+
+export -f initialize_role
 export -f upgrade_role
 
 export -f initialize
