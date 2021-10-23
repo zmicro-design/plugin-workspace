@@ -32,13 +32,13 @@ USER  $WORKSPACE_USER
 
 WORKDIR /home/workspace/code
 
-ARG   VERSION=latest
-
-ENV   WORKSPACE_VERSION=${VERSION}
-
 RUN   zmicro update -a
 
 RUN   zmicro plugin install workspace
+
+ARG   VERSION=latest
+
+ENV   WORKSPACE_VERSION=${VERSION}
 
 # COPY  build/config/hosts /etc/hosts
 
