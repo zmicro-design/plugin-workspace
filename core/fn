@@ -8,7 +8,7 @@ ensure_config() {
 
 install_common() {
   # @TODO
-  plugin_load_mod workspace
+  plugin_load_mod ${PLUGIN_WORKSPACE_NAME}
 
   log_info "zworkspace install common (version: $PLUGIN_VERSION)..."
 
@@ -80,7 +80,7 @@ initialize() {
 
 upgrade() {
   # @TODO
-  plugin_load_mod workspace
+  plugin_load_mod $PLUGIN_WORKSPACE_NAME
 
   local version=$(zmicro config get ZWORKSPACE_VERSION)
   if [ -z "$version" ]; then
@@ -91,7 +91,7 @@ upgrade() {
 
   local role=$(zmicro config get ZWORKSPACE_ROLE)
   if [ -n "$role" ]; then
-    log_info "Upgrading workspace with role: $role ..."
+    log_info "Upgrading ${PLUGIN_WORKSPACE_NAME} with role: $role ..."
 
     upgrade_role $role
   fi
