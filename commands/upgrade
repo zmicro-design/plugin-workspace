@@ -1,0 +1,21 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace upgrade"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  upgrade
+}
+
+run() {
+  core $@
+}
+
+run $@

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace initialize [type:=nodejs]"
+  echo ""
+  echo ""
+  echo "Type:"
+  echo "  nodejs"
+  echo "  go"
+  echo "  deno"
+  echo "  rust"
+  echo "  python"
+  echo "  all"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local role=$1
+
+  initialize $role
+}
+
+run() {
+  core $@
+}
+
+run $@

@@ -1,0 +1,107 @@
+#!/bin/bash
+
+ensure_config() {
+  load inquirer
+
+  # load_config_file $PLUGIN_WORKSPACE_CONFIG
+}
+
+install_common() {
+  # @TODO
+  plugin_load_mod workspace
+
+  log_info "zworkspace install common (version: $PLUGIN_VERSION)..."
+
+  zmicro config set ZWORKSPACE_VERSION $PLUGIN_VERSION
+
+  zmicro package install zsh
+  zmicro package install vim
+  zmicro package install tmux
+  zmicro package install docker
+  zmicro package install inlets
+}
+
+install_role() {
+  local role=$1
+
+  zmicro config set ZWORKSPACE_ROLE $role
+
+  case $role in
+    nodejs)
+      zmicro package install nodejs -v v14
+      ;;
+    go)
+      zmicro package install go
+      ;;
+    deno)
+      zmicro package install deno
+      ;;
+    rust)
+      zmicro package install rust
+      ;;
+    python)
+      zmicro package install python
+      ;;
+    common)
+      ;;
+    all)
+      zmicro package install nodejs -v v14
+      zmicro package install go
+      zmicro package install deno
+      zmicro package install rust
+      zmicro package install python
+      ;;
+    *)
+      log_error "[zworkspace][install_role] unknown role: ${role}"
+      exit 1
+      ;;
+  esac
+}
+
+upgrade_role() {
+  local role=$1
+
+  install_role $role
+
+  zmicro package install inlets
+}
+
+initialize() {
+  local role=$1
+  
+  # 1. common
+  install_common
+
+  # 2. developer role
+  if [ -n "$role" ]; then
+    install_role $role
+  fi
+}
+
+upgrade() {
+  # @TODO
+  plugin_load_mod workspace
+
+  local version=$(zmicro config get ZWORKSPACE_VERSION)
+  if [ -z "$version" ]; then
+    install_common
+  elif [ "$version" != "$PLUGIN_VERSION" ]; then
+    install_common
+  fi
+
+  local role=$(zmicro config get ZWORKSPACE_ROLE)
+  if [ -n "$role" ]; then
+    log_info "Upgrading workspace with role: $role ..."
+
+    upgrade_role $role
+  fi
+}
+
+export -f ensure_config
+export -f install_common
+
+export -f install_role
+export -f upgrade_role
+
+export -f initialize
+export -f upgrade
