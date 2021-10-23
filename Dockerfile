@@ -20,7 +20,7 @@ RUN   locale-gen en_US.UTF-8
 
 ARG   WORKSPACE_USER=workspace
 
-ENV   WORKSPACE_USER=$WORKSPACE_USER USER=$WORKSPACE_USER TZ=Asia/Shanghai
+ENV   WORKSPACE_USER=$WORKSPACE_USER USER=$WORKSPACE_USER HOME=/home/$WORKSPACE_USER TZ=Asia/Shanghai
 
 COPY  build/config/sshd_config /etc/ssh/sshd_config
 
