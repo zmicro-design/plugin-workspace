@@ -87,6 +87,9 @@ initialize() {
 upgrade() {
   local role=$1
 
+  # ensure update source list
+  sudo apt update
+
   # @TODO
   plugin_load_mod $PLUGIN_WORKSPACE_NAME
 
