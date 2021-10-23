@@ -18,11 +18,13 @@ RUN   apt install -yqq locales
 
 RUN   locale-gen en_US.UTF-8
 
-COPY  build /build
-
 ARG   WORKSPACE_USER=workspace
 
 ENV   WORKSPACE_USER=$WORKSPACE_USER USER=$WORKSPACE_USER TZ=Asia/Shanghai
+
+COPY  build/bin/create_user /build/bin/create_user
+
+COPY  build/bin/create_ssh /build/bin/create_ssh
 
 RUN   sh /build/bin/create_user $WORKSPACE_USER
 
@@ -47,5 +49,7 @@ ENV   WORKSPACE_VERSION=${VERSION}
 # RUN   sudo apt update
 
 RUN   zmicro plugin update workspace && zmicro plugin run workspace upgrade nodejs
+
+COPY  build /build
 
 CMD   sh /build/bin/start
