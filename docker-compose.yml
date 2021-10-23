@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  workspace:
+    build:
+      context: .
+    command: while true; do sleep 1; done
