@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Copy Projj Config..."
+if [ ! -d "$HOME/.projj" ]; then
+  mkdir -p $HOME/.projj
+  
+  #
+  cp /build/config/projj_config $HOME/.projj/config.json
+fi

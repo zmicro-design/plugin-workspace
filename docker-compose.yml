@@ -4,4 +4,4 @@ services:
   workspace:
     build:
       context: .
-    command: while true; do sleep 1; done
+    # command: sleep 10000000
