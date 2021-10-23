@@ -36,7 +36,7 @@ RUN   zmicro update -a
 
 RUN   zmicro plugin install workspace
 
-RUN   zmicro plugin run workspace upgrade nodejs
+RUN   zmicro plugin run workspace initialize nodejs
 
 ARG   VERSION=latest
 
