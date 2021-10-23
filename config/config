@@ -4,3 +4,4 @@ export PLUGIN_WORKSPACE_DATA=$(plugin_get_app_data_path $PLUGIN_WORKSPACE_NAME)
 export PLUGIN_WORKSPACE_LOGS=$(plugin_get_app_logs_path $PLUGIN_WORKSPACE_NAME)
 export PLUGIN_WORKSPACE_CONFIGS=$(plugin_get_app_configs_path $PLUGIN_WORKSPACE_NAME)/config
 
+export PLUGIN_WORKSPACE_CODE=$HOME/code
