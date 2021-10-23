@@ -79,6 +79,8 @@ initialize() {
 }
 
 upgrade() {
+  local role=$1
+
   # @TODO
   plugin_load_mod $PLUGIN_WORKSPACE_NAME
 
@@ -89,7 +91,10 @@ upgrade() {
     install_common
   fi
 
-  local role=$(zmicro config get ZWORKSPACE_ROLE)
+  if [ -z "$role" ]; then
+    role=$(zmicro config get ZWORKSPACE_ROLE)
+  fi
+  
   if [ -n "$role" ]; then
     log_info "Upgrading ${PLUGIN_WORKSPACE_NAME} with role: $role ..."
 
