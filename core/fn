@@ -16,7 +16,7 @@ initialize_common() {
   # @TODO
   plugin_load_mod ${PLUGIN_WORKSPACE_NAME}
 
-  log_info "zworkspace install common (version: $PLUGIN_VERSION)..."
+  log_info "zworkspace initialize common (version: $PLUGIN_VERSION) ..."
 
   zmicro config set ZWORKSPACE_VERSION $PLUGIN_VERSION
 
@@ -24,11 +24,13 @@ initialize_common() {
   zmicro package install vim
   zmicro package install tmux
   zmicro package install docker
-  zmicro package install inlets
+  # zmicro package install inlets
 }
 
 initialize_role() {
   local role=$1
+
+  log_info "zworkspace initialize role (role: $role) ..."
 
   zmicro config set ZWORKSPACE_ROLE $role
 
@@ -82,6 +84,9 @@ initialize() {
   if [ -n "$role" ]; then
     initialize_role $role
   fi
+
+  # 3. inlets
+  zmicro package install inlets
 }
 
 upgrade() {
