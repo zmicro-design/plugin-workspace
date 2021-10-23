@@ -110,4 +110,78 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+
+  publish-arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      # - name: Docker meta
+      #   id: meta
+      #   uses: docker/metadata-action@v3
+      #   with:
+      #     # Custom Image: https://github.com/docker/metadata-action#inputs
+      #     # images: whatwewant/zmicro,ghcr.io/whatwewant/zmicro
+      #     images: whatwewant/workspace
+      #     tags: |
+      #       type=ref,event=branch
+      #       type=semver,pattern=v{{version}}
+      #       type=semver,pattern=v{{major}}
+      #       type=semver,pattern=v{{major}}.{{minor}}
+
+      - name: Docker Meta
+        id: meta
+        run: |
+          IMAGE_VERSION=$(echo ${GITHUB_REF} | sed -e "s%refs/tags/%%g")
+          IMAGE=${ACTION_IMAGE_NAMESPACE}/${ACTION_IMAGE_NAME}:${IMAGE_VERSION}
+          echo "IMAGE: ${IMAGE}"
+          echo "::set-output name=version::${IMAGE_VERSION}"
+          echo "::set-output name=tags::${IMAGE}"
+        shell: bash
+        env:
+          ACTION_IMAGE_NAMESPACE: whatwewant
+          ACTION_IMAGE_NAME: workspace
+
+      - name: Show Docker Tags
+        run: |
+          echo "Docker Tags: ${{ steps.meta.outputs.tags }}"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # - name: Login to GHCR
+      #   if: github.event_name != 'pull_request'
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.repository_owner }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/arm64
