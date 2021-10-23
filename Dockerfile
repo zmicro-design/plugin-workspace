@@ -22,13 +22,11 @@ ARG   WORKSPACE_USER=workspace
 
 ENV   WORKSPACE_USER=$WORKSPACE_USER USER=$WORKSPACE_USER TZ=Asia/Shanghai
 
+COPY  build/config/sshd_config /etc/ssh/sshd_config
+
 COPY  build/bin/create_user /build/bin/create_user
 
-COPY  build/bin/create_ssh /build/bin/create_ssh
-
 RUN   sh /build/bin/create_user $WORKSPACE_USER
-
-RUN   sh /build/bin/create_ssh
 
 USER  $WORKSPACE_USER
 
