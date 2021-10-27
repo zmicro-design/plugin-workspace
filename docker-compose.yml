@@ -5,5 +5,5 @@ services:
     build:
       context: .
     # command: sleep 10000000
-    volumes:
-      - /usr/local/lib/zmicro:/usr/local/lib/zmicro
+    # volumes:
+    #   - /usr/local/lib/zmicro:/usr/local/lib/zmicro
