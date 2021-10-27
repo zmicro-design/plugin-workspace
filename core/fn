@@ -16,7 +16,7 @@ initialize_common() {
   # @TODO
   plugin_load_mod ${PLUGIN_WORKSPACE_NAME}
 
-  log_info "zworkspace initialize common (version: $PLUGIN_VERSION) ..."
+  log::info "zworkspace initialize common (version: $PLUGIN_VERSION) ..."
 
   zmicro config set ZWORKSPACE_VERSION $PLUGIN_VERSION
 
@@ -30,7 +30,7 @@ initialize_common() {
 initialize_role() {
   local role=$1
 
-  log_info "zworkspace initialize role (role: $role) ..."
+  log::info "zworkspace initialize role (role: $role) ..."
 
   zmicro config set ZWORKSPACE_ROLE $role
 
@@ -60,7 +60,7 @@ initialize_role() {
       zmicro package install python
       ;;
     *)
-      log_error "[zworkspace][initialize_role] unknown role: ${role}"
+      log::error "[zworkspace][initialize_role] unknown role: ${role}"
       exit 1
       ;;
   esac
@@ -110,7 +110,7 @@ upgrade() {
   fi
   
   if [ -n "$role" ]; then
-    log_info "Upgrading ${PLUGIN_WORKSPACE_NAME} with role: $role ..."
+    log::info "Upgrading ${PLUGIN_WORKSPACE_NAME} with role: $role ..."
 
     upgrade_role $role
   fi
