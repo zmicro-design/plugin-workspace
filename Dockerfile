@@ -50,7 +50,7 @@ RUN   echo "WORKSPACE_VERSION: ${VERSION}"
 
 RUN   zmicro plugin update workspace
 
-RUN   zmicro plugin run workspace upgrade nodejs
+RUN   zmicro plugin run workspace upgrade
 
 COPY  build /build
 
