@@ -1,4 +1,4 @@
-FROM  whatwewant/zmicro:v1.3.8
+FROM  whatwewant/zmicro:v1.5.4
 
 ARG   DEBIAN_FRONTEND=noninteractive
 
