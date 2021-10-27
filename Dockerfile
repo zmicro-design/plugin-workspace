@@ -46,7 +46,11 @@ ENV   WORKSPACE_VERSION=${VERSION}
 
 # RUN   sudo apt update
 
-RUN   zmicro plugin update workspace && zmicro plugin run workspace upgrade nodejs
+RUN   echo "WORKSPACE_VERSION: ${VERSION}"
+
+RUN   zmicro plugin update workspace
+
+RUN   zmicro plugin run workspace upgrade nodejs
 
 COPY  build /build
 
