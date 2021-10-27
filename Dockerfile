@@ -48,9 +48,7 @@ ENV   WORKSPACE_VERSION=${VERSION}
 
 RUN   echo "WORKSPACE_VERSION: ${VERSION}"
 
-RUN   zmicro plugin update workspace
-
-RUN   zmicro plugin run workspace upgrade
+RUN   zmicro update -a && zmicro plugin update workspace && zmicro plugin run workspace upgrade
 
 COPY  build /build
 
