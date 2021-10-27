@@ -14,7 +14,7 @@ initialize_common() {
   initialize_config
 
   # @TODO
-  plugin_load_mod ${PLUGIN_WORKSPACE_NAME}
+  plugin::load_mod ${PLUGIN_WORKSPACE_NAME}
 
   log::info "zworkspace initialize common (version: $PLUGIN_VERSION) ..."
 
@@ -96,7 +96,7 @@ upgrade() {
   sudo apt update
 
   # @TODO
-  plugin_load_mod $PLUGIN_WORKSPACE_NAME
+  plugin::load_mod $PLUGIN_WORKSPACE_NAME
 
   local version=$(zmicro config get ZWORKSPACE_VERSION)
   if [ -z "$version" ]; then
