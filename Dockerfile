@@ -12,7 +12,9 @@ RUN   apt update && apt install -yqq \
   iputils-ping \
   dnsutils
 
-COPY  build/config/locale /etc/default/locale
+COPY  build/config/default_locale /etc/default/locale
+
+COPY  build/config/locale /var/lib/locales/supported.d/local
 
 RUN   apt install -yqq locales
 
