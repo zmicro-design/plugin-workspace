@@ -1,9 +1,0 @@
-{
-  "base": [
-    "/home/workspace/code"
-  ],
-  "hooks": {},
-  "alias": {
-    "github://": "https://github.com/"
-  }
-}
