@@ -21,6 +21,10 @@ core() {
   fi
 
   local role=$1
+  if [ -z "$role" ]; then
+    help
+    exit 0
+  fi
 
   initialize $role
 }
