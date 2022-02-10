@@ -1,8 +1,0 @@
-version: '3.7'
-
-services:
-  workspace:
-    image: whatwewant/workspace:v1.0.0
-    # command: sleep 10000000
-    # volumes:
-    #   - /usr/local/lib/zmicro:/usr/local/lib/zmicro
