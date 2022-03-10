@@ -36,7 +36,7 @@ initialize_role() {
 
   case $role in
     nodejs)
-      zmicro package install nodejs -v v14
+      zmicro package install nodejs -v v16
       ;;
     go)
       zmicro package install go
@@ -53,7 +53,7 @@ initialize_role() {
     common)
       ;;
     all)
-      zmicro package install nodejs -v v14
+      zmicro package install nodejs -v v16
       zmicro package install go
       zmicro package install deno
       zmicro package install rust
