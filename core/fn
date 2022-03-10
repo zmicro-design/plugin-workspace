@@ -92,8 +92,11 @@ initialize() {
 upgrade() {
   local role=$1
 
+  # update self
+  zmicro plugin update workspace
+
   # ensure update source list
-  sudo apt update
+  sudo apt update -y
 
   # @TODO
   plugin::load_mod $PLUGIN_WORKSPACE_NAME
