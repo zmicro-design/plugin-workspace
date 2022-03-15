@@ -1,0 +1,30 @@
+#!/bin/bash
+
+load inquirer
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace restart <workspace>"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local workspace=$1
+  if [ -z "$workspace" ]; then
+    log::error "[workspace][restart] workspace $workspace is required"
+    exit 1
+  fi
+
+  zmicro workspace stop $workspace
+  zmicro workspace start $workspace
+}
+
+run() {
+  core $@
+}
+
+run $@

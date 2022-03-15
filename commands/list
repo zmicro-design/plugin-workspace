@@ -1,0 +1,46 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace list"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
+  local workspaces=""
+  for service in $services; do
+    local workspace_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/workspace
+    if [ -f "$workspace_file_path" ]; then
+      if [ "$workspaces" = "" ]; then
+        workspaces="$service"
+      else
+        workspaces="$workspaces $service"
+      fi
+    fi
+  done
+
+  if [ "$workspaces" = "" ]; then
+    log::info "No workspaces found"
+    exit 0
+  fi
+
+  print() {
+    local index=$(($1 + 1))
+    local name=$2
+
+    log::info "$1 $name"
+  }
+
+  array::each print $workspaces
+}
+
+run() {
+  core $@
+}
+
+run $@

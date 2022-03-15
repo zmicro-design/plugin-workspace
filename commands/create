@@ -1,0 +1,67 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace create <workspace>"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local workspace=$1
+  local company=$2
+  local port=$3
+  if [ -z "$workspace" ]; then
+    os::inquirer workspace text "请输入用户名:" 
+  fi
+
+  local SERVICE_NAME=workspace_user_$workspace
+  local SERVICE_DIR=$ZMICRO_PLUGINS_PATH/service/services/${SERVICE_NAME}
+  local SERVICE_CONFIG_DIR=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/${SERVICE_NAME}
+  local WORKSPACE_FILE_PATH=$SERVICE_CONFIG_DIR/workspace
+  if [ -d "$SERVICE_DIR" ]; then
+    # zmicro service pull_repo $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_NAME $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_VERSION $SERVICE_NAME
+    log::error "已存在用户 $workspace 的工作空间，你可以通过 zmicro workspace start $workspace 来启动工作空间"
+    exit 1
+  fi
+
+  if [ -z "$company" ]; then
+    os::inquirer company text "请输入公司名:" 
+  fi
+
+  if [ -z "$port" ]; then
+    os::inquirer port text "请输入 SSH 端口号:" 
+  fi
+
+  SERVICE_AUTO_START=N zmicro service install $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_NAME $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_VERSION $SERVICE_NAME
+
+  export SERVICE_REMOTEDEV_COMPANY=$company
+  export SERVICE_REMOTEDEV_GIT_USER=$workspace
+  export SERVICE_REMOTEDEV_GIT_EMAIL=$workspace@$company
+  export SERVICE_REMOTEDEV_SSH_PORT=$port
+  export SERVICE_REMOTEDEV_PREVILEGED=false
+
+  # @TODO workspace is a service, how to recognize it?
+  # use a file in config dir
+  if [ ! -f $WORKSPACE_FILE_PATH ]; then
+    mkdir -p $SERVICE_CONFIG_DIR
+    echo $workspace@$company > $WORKSPACE_FILE_PATH
+  fi
+
+  echo "SERVICE_REMOTEDEV_COMPANY: $SERVICE_REMOTEDEV_COMPANY"
+  echo "SERVICE_REMOTEDEV_GIT_USER: $SERVICE_REMOTEDEV_GIT_USER"
+  echo "SERVICE_REMOTEDEV_GIT_EMAIL: $SERVICE_REMOTEDEV_GIT_EMAIL"
+  echo "SERVICE_REMOTEDEV_SSH_PORT: $SERVICE_REMOTEDEV_SSH_PORT"
+  echo "SERVICE_REMOTEDEV_PREVILEGED: $SERVICE_REMOTEDEV_PREVILEGED"
+
+  zmicro service start $SERVICE_NAME
+}
+
+run() {
+  core $@
+}
+
+run $@
