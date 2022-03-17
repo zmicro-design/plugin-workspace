@@ -14,6 +14,20 @@ core() {
   local workspace=$1
   local company=$2
   local port=$3
+  
+  if [ -z "$PLUGIN_WORKSPACE_USERNAME" ]; then
+    workspace=$PLUGIN_WORKSPACE_USERNAME
+  fi
+
+  if [ -z "$PLUGIN_WORKSPACE_COMPANY" ]; then
+    company=$PLUGIN_WORKSPACE_COMPANY
+  fi
+
+   if [ -z "$PLUGIN_WORKSPACE_SSHPORT" ]; then
+    port=$PLUGIN_WORKSPACE_SSHPORT
+  fi
+
+
   if [ -z "$workspace" ]; then
     os::inquirer workspace text "请输入用户名:" 
   fi
