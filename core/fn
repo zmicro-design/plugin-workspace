@@ -119,6 +119,62 @@ upgrade() {
   fi
 }
 
+workspace::list() {
+  local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
+  local workspaces=""
+  for service in $services; do
+    local workspace_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/workspace
+    if [ -f "$workspace_file_path" ]; then
+      if [ "$workspaces" = "" ]; then
+        workspaces="$service"
+      else
+        workspaces="$workspaces $service"
+      fi
+    fi
+  done
+
+  echo $workspaces
+}
+
+workspace::check_available() {
+  local workspace=$1
+  local port=$2
+  if [ -z "$workspace" ]; then
+    log::error "[workspace::check_available] workspace is empty"
+    exit 1
+  fi
+
+  if [ -z "$port" ]; then
+    log::error "[workspace::check_available] port is required"
+    exit 1
+  fi
+
+  local workspaces=$(workspace::list)
+  for w in $workspaces; do
+    if [ "$w" = "$workspace" ]; then
+      log::error "[workspace::check_available] workspace: $workspace is already exists"
+      exit 1
+    fi
+  done
+
+  for workspace in $workspaces; do
+    local workspace_service_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$workspace
+    local workspace_config_path=$workspace_service_path/config
+    if [ -f "$workspace_config_path" ]; then
+      local port_exist=$(cat $workspace_config_path | grep SERVICE_REMOTEDEV_SSH_PORT | awk -F '=' '{print $2}')
+      if [ -z "$port_exist" ]; then
+        continue
+      fi
+      
+      # echo "port_exist: $port_exist"
+      if [ "$port" = "$port_exist" ]; then
+        log::error "[workspace::check_available] port: $port is already exists"
+        exit 1
+      fi
+    fi
+  done
+}
+
 export -f ensure_config
 
 export -f initialize_config
@@ -129,3 +185,6 @@ export -f upgrade_role
 
 export -f initialize
 export -f upgrade
+
+export -f workspace::list
+export -f workspace::check_available

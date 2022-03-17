@@ -50,6 +50,8 @@ core() {
     os::inquirer port text "请输入 SSH 端口号:" 
   fi
 
+  workspace::check_available $workspace $port
+
   SERVICE_AUTO_START=N zmicro service install $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_NAME $PLUGIN_WORKSPACE_REMOTEDEV_IMAGE_VERSION $SERVICE_NAME
 
   export SERVICE_REMOTEDEV_COMPANY=$company
