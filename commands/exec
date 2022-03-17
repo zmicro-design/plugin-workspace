@@ -16,7 +16,7 @@ core() {
   local workspace=$1
   if [ -n "$workspace" ]; then
     local SERVICE_NAME=workspace_user_$workspace
-    zmicro service start $SERVICE_NAME
+    zmicro service exec $SERVICE_NAME
     exit 0
   fi
 
