@@ -74,7 +74,7 @@ upgrade_role() {
   zmicro package install inlets
 }
 
-initialize() {
+workspace::env_initialize() {
   local role=$1
   
   # 1. common
@@ -89,7 +89,7 @@ initialize() {
   zmicro package install inlets
 }
 
-upgrade() {
+workspace::env_upgrade() {
   local role=$1
 
   # update self
@@ -183,8 +183,8 @@ export -f initialize_common
 export -f initialize_role
 export -f upgrade_role
 
-export -f initialize
-export -f upgrade
+export -f workspace::env_initialize
+export -f workspace::env_upgrade
 
 export -f workspace::list
 export -f workspace::check_available

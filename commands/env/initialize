@@ -2,7 +2,7 @@
 
 help() {
   echo "Usage:"
-  echo "  zworkspace setup [type:=nodejs]"
+  echo "  zworkspace env initialize [type:=nodejs]"
   echo ""
   echo ""
   echo "Type:"
@@ -21,12 +21,8 @@ core() {
   fi
 
   local role=$1
-  if [ -z "$role" ]; then
-    help
-    exit 0
-  fi
 
-  initialize $role
+  workspace::env_initialize $role
 }
 
 run() {
