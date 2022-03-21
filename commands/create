@@ -63,7 +63,8 @@ core() {
   # @TODO workspace is a service, how to recognize it?
   # use a file in config dir
   if [ ! -f $WORKSPACE_FILE_PATH ]; then
-    mkdir -p $SERVICE_CONFIG_DIR
+    sudo mkdir -p $SERVICE_CONFIG_DIR
+    sudo chown -R $USER $SERVICE_CONFIG_DIR
     echo $workspace@$company > $WORKSPACE_FILE_PATH
   fi
 
