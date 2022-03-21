@@ -33,9 +33,16 @@ core() {
     local index=$(($1 + 1))
     local name=$2
 
-    log::info "$1 $name"
+    local config_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$name/config
+    local port="no"
+    if [ -f $config_file_path ]; then
+      port=$(cat $config_file_path | grep SERVICE_REMOTEDEV_SSH_PORT | awk -F '=' '{print $2}')
+    fi
+
+    log::info "$1 \t $port \t ${name#workspace_user_}"
   }
 
+  log::info "序号 \t 端口 \t 用户"
   array::each print $workspaces
 }
 
