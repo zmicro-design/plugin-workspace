@@ -14,41 +14,12 @@ core() {
   fi
 
   local workspace=$1
-  if [ -n "$workspace" ]; then
-    local SERVICE_NAME=workspace_user_$workspace
-    # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required 
-    
-    zmicro service exec $SERVICE_NAME vim /home/workspace/.ssh/authorized_keys
-    exit 0
-  fi
-
-  local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
-  local workspaces=""
-  local count=0
-  for service in $services; do
-    local workspace_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/workspace
-    if [ -f "$workspace_file_path" ]; then
-      count=$(($count + 1))
-      local name=${service#workspace_user_}
-      if [ "$workspaces" = "" ]; then
-        workspaces=($name)
-      else
-        workspaces=(${workspaces[@]} $name)
-      fi
-    fi
-  done
-
-  if [ "$count" = "0" ]; then
-    log::info "No workspaces found"
-    exit 0
-  fi
-
-  inquirer::select "Select an workspace ?" workspaces workspace
   # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required 
+  if [ -z "$workspace" ]; then
+    workspace="-"
+  fi
 
-  local SERVICE_NAME=workspace_user_$workspace
-  # local SERVICE_CONFIG_DIR=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$workspace
-  zmicro service exec $SERVICE_NAME vim /home/workspace/.ssh/authorized_keys
+  zmicro workspace exec $workspace vim /home/workspace/.ssh/authorized_keys
 }
 
 run() {
