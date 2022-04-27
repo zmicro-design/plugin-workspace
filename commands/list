@@ -29,7 +29,7 @@ core() {
     exit 0
   fi
 
-  local STATUS=""
+  local STATUS=()
   check_status() {
     local index=$(($1 + 1))
     local name=$2
@@ -37,9 +37,9 @@ core() {
     local service_name=$name
     local is_running=$(zmicro service is_running $service_name)
     if [ "$is_running" = "true" ]; then
-      STATUS="$STATUS running"
+      STATUS+=(running)
     else
-      STATUS="$STATUS stopped"
+      STATUS+=(stopped)
     fi
   }
 
@@ -54,14 +54,13 @@ core() {
       port=$SERVICE_REMOTEDEV_SSH_PORT
     fi
 
-    log::info "$1 \t $port \t ${STATUS[$i]} \t ${name#workspace_user_}"
+    log::info "$1 \t $port \t ${STATUS[$1]} \t ${name#workspace_user_}"
   }
 
   # check status
   array::each check_status $workspaces
 
-
-  log::info "序号 \t 端口 \t  状态    \t 用户"
+  log::info "序号 \t 端口 \t 状态    \t 用户"
   array::each print $workspaces
 }
 
