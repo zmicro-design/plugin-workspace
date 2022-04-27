@@ -4,4 +4,5 @@ PLUGIN_VERSION=v1.2.8
 
 DEPENDENCIES=(
   "package@latest"
+  "service@latest"
 )
