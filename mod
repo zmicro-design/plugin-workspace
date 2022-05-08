@@ -1,6 +1,6 @@
 PLUGIN_NAME=workspace
 PLUGIN_DESCRIPTION="zmicro workspace plugin"
-PLUGIN_VERSION=1.3.4
+PLUGIN_VERSION=v1.3.5
 
 DEPENDENCIES=(
   "package@latest"
