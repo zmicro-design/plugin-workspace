@@ -175,6 +175,40 @@ workspace::check_available() {
   done
 }
 
+workspace::notify() {
+  local typ=$1
+  local message=$(
+      cat <<-END
+# Workspace Info\n
+* SERVICE_REMOTEDEV_COMPANY: ${SERVICE_REMOTEDEV_COMPANY}\n
+* SERVICE_REMOTEDEV_GIT_USER: ${SERVICE_REMOTEDEV_GIT_USER}\n
+* SERVICE_REMOTEDEV_GIT_EMAIL: ${SERVICE_REMOTEDEV_GIT_EMAIL}\n
+* SERVICE_REMOTEDEV_SSH_PORT: ${SERVICE_REMOTEDEV_SSH_PORT}\n
+* SERVICE_REMOTEDEV_PREVILEGED: ${SERVICE_REMOTEDEV_PREVILEGED}\n
+\n
+# System Info\n
+$(os::info)
+END
+    )
+
+  notify::feishu \
+    "$PLUGIN_WORKSPACE_NOTIFY_URL" \
+    "[workspace][${typ}] ${SERVICE_REMOTEDEV_GIT_EMAIL} in ${SERVICE_REMOTEDEV_COMPANY}" \
+    "$message"
+}
+
+workspace::notify_create() {
+  workspace::notify create
+}
+
+workspace::notify_upgrade() {
+  workspace::notify upgrade
+}
+
+workspace::notify_restart() {
+  workspace::notify restart
+}
+
 export -f ensure_config
 
 export -f initialize_config
@@ -188,3 +222,8 @@ export -f workspace::env_upgrade
 
 export -f workspace::list
 export -f workspace::check_available
+
+export -f workspace::notify
+export -f workspace::notify_create
+export -f workspace::notify_upgrade
+export -f workspace::notify_restart

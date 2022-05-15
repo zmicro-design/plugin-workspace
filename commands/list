@@ -62,6 +62,8 @@ core() {
 
   log::info "序号 \t 端口 \t 状态    \t 用户"
   array::each print $workspaces
+
+  workspace::notify list >> /dev/null 2>&1 &
 }
 
 run() {

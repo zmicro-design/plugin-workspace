@@ -77,6 +77,8 @@ core() {
   echo "SERVICE_REMOTEDEV_SSH_PORT: $SERVICE_REMOTEDEV_SSH_PORT"
   echo "SERVICE_REMOTEDEV_PREVILEGED: $SERVICE_REMOTEDEV_PREVILEGED"
 
+  workspace::notify create >> /dev/null 2>&1 &
+
   zmicro service start $SERVICE_NAME
 }
 

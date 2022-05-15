@@ -21,6 +21,8 @@ core() {
 
   zmicro workspace stop $workspace
   zmicro workspace start $workspace
+
+  workspace::notify restart >> /dev/null 2>&1 &
 }
 
 run() {
