@@ -16,9 +16,9 @@ core() {
   local workspace=$1
   if [ -n "$workspace" ]; then
     local SERVICE_NAME=workspace_user_$workspace
-    workspace::notify_create >> /dev/null 2>&1 &
-
     zmicro service update $SERVICE_NAME
+
+    workspace::notify_create $SERVICE_NAME >> /dev/null 2>&1 &
     exit 0
   fi
 
@@ -50,7 +50,7 @@ core() {
   
   zmicro service update $SERVICE_NAME
 
-  workspace::notify_create >> /dev/null 2>&1 &
+  workspace::notify_create $SERVICE_NAME >> /dev/null 2>&1 &
 }
 
 run() {

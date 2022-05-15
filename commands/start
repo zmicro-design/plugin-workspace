@@ -47,7 +47,7 @@ core() {
   # local SERVICE_CONFIG_DIR=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$workspace
   zmicro service start $SERVICE_NAME
 
-  workspace::notify start >> /dev/null 2>&1 &
+  workspace::notify start $SERVICE_NAME >> /dev/null 2>&1 &
 }
 
 run() {

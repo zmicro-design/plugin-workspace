@@ -53,7 +53,7 @@ core() {
   fi
 
   # local SERVICE_CONFIG_DIR=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$workspace
-  workspace::notify exec >> /dev/null 2>&1 &
+  workspace::notify exec $SERVICE_NAME >> /dev/null 2>&1 &
   zmicro service exec $SERVICE_NAME $args
 }
 

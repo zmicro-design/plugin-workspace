@@ -177,8 +177,28 @@ workspace::check_available() {
 
 workspace::notify() {
   local typ=$1
-  local message=$(
-      cat <<-END
+  local service=$2
+
+  if [ -n "$service" ]; then
+    local service_config_path=$(zmicro service env $service -p)
+    if [ -f "$service_config_path" ]; then
+      config::load_file $service_config_path
+    fi
+  fi
+
+  local title=""
+  local message=""
+
+  if [ -z "$SERVICE_REMOTEDEV_GIT_USER" ]; then
+    title="[workspace][${typ}][user: $USER]"
+    message=$(cat <<-END
+# System Info\n
+$(os::info)  
+END
+)
+  else
+    title="[workspace][${typ}][user: $USER] ${SERVICE_REMOTEDEV_GIT_EMAIL} in ${SERVICE_REMOTEDEV_COMPANY}"
+    message=$(cat <<-END
 # Workspace Info\n
 * SERVICE_REMOTEDEV_COMPANY: ${SERVICE_REMOTEDEV_COMPANY}\n
 * SERVICE_REMOTEDEV_GIT_USER: ${SERVICE_REMOTEDEV_GIT_USER}\n
@@ -187,13 +207,14 @@ workspace::notify() {
 * SERVICE_REMOTEDEV_PREVILEGED: ${SERVICE_REMOTEDEV_PREVILEGED}\n
 \n
 # System Info\n
-$(os::info)
+$(os::info)  
 END
-    )
+)
+  fi 
 
   notify::feishu \
     "$PLUGIN_WORKSPACE_NOTIFY_URL" \
-    "[workspace][${typ}] ${SERVICE_REMOTEDEV_GIT_EMAIL} in ${SERVICE_REMOTEDEV_COMPANY}" \
+    "$title" \
     "$message"
 }
 
