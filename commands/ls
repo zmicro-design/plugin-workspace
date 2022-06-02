@@ -1,0 +1,75 @@
+#!/bin/bash
+
+help() {
+  echo "List all workspaces"
+  echo ""
+  echo "Usage:"
+  echo "  zworkspace ls"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
+  local workspaces=""
+  for service in $services; do
+    local workspace_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/workspace
+    if [ -f "$workspace_file_path" ]; then
+      if [ "$workspaces" = "" ]; then
+        workspaces="$service"
+      else
+        workspaces="$workspaces $service"
+      fi
+    fi
+  done
+
+  if [ "$workspaces" = "" ]; then
+    log::info "No workspaces found"
+    exit 0
+  fi
+
+  local STATUS=()
+  check_status() {
+    local index=$(($1 + 1))
+    local name=$2
+
+    local service_name=$name
+    local is_running=$(zmicro service is_running $service_name)
+    if [ "$is_running" = "true" ]; then
+      STATUS+=(running)
+    else
+      STATUS+=(stopped)
+    fi
+  }
+
+  print() {
+    local index=$(($1 + 1))
+    local name=$2
+
+    local config_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$name/config
+    local port="no"
+    if [ -f $config_file_path ]; then
+      config::load_file $config_file_path
+      port=$SERVICE_REMOTEDEV_SSH_PORT
+    fi
+
+    log::info "$1 \t $port \t ${STATUS[$1]} \t ${name#workspace_user_}"
+  }
+
+  # check status
+  array::each check_status $workspaces
+
+  log::info "序号 \t 端口 \t 状态    \t 用户"
+  array::each print $workspaces
+
+  workspace::notify list >> /dev/null 2>&1 &
+}
+
+run() {
+  core $@
+}
+
+run $@
