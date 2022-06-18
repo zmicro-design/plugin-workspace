@@ -16,6 +16,9 @@ core() {
   local workspace=$1
   if [ -n "$workspace" ]; then
     local SERVICE_NAME=workspace_user_$workspace
+
+    workspace::notify start $SERVICE_NAME >> /dev/null 2>&1 &
+
     zmicro service start $SERVICE_NAME
     exit 0
   fi
@@ -45,9 +48,10 @@ core() {
 
   local SERVICE_NAME=workspace_user_$workspace
   # local SERVICE_CONFIG_DIR=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$workspace
-  zmicro service start $SERVICE_NAME
-
+  
   workspace::notify start $SERVICE_NAME >> /dev/null 2>&1 &
+
+  zmicro service start $SERVICE_NAME
 }
 
 run() {

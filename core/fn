@@ -180,7 +180,7 @@ workspace::notify() {
   local service=$2
 
   if [ -n "$service" ]; then
-    local service_config_path=$(zmicro service env $service -p)
+    local service_config_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/config
     if [ -f "$service_config_path" ]; then
       config::load_file $service_config_path
     fi
@@ -189,11 +189,11 @@ workspace::notify() {
   local title=""
   local message=""
 
-  if [ -z "$SERVICE_REMOTEDEV_GIT_USER" ]; then
+  if [ -z "$service" ]; then
     title="[workspace][${typ}][user: $USER]"
     message=$(cat <<-END
-# System Info\n
-$(os::info)  
+# System Info\n\n
+$(os::info)
 END
 )
   else
@@ -206,8 +206,8 @@ END
 * SERVICE_REMOTEDEV_SSH_PORT: ${SERVICE_REMOTEDEV_SSH_PORT}\n
 * SERVICE_REMOTEDEV_PREVILEGED: ${SERVICE_REMOTEDEV_PREVILEGED}\n
 \n
-# System Info\n
-$(os::info)  
+# System Info\n\n
+$(os::info)
 END
 )
   fi 

@@ -19,10 +19,10 @@ core() {
     exit 1
   fi
 
+  workspace::notify restart >> /dev/null 2>&1 &
+
   zmicro workspace stop $workspace
   zmicro workspace start $workspace
-
-  workspace::notify restart >> /dev/null 2>&1 &
 }
 
 run() {
