@@ -23,6 +23,11 @@ core() {
   fi
 
   local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
+  if [ ! -d $services ]; then
+    log::info "No workspaces found"
+    exit 0
+  fi
+
   local workspaces=""
   local count=0
   for service in $services; do

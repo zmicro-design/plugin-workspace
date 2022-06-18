@@ -61,7 +61,7 @@ core() {
   export SERVICE_REMOTEDEV_GIT_USER=$workspace
   export SERVICE_REMOTEDEV_GIT_EMAIL=$workspace@$company
   export SERVICE_REMOTEDEV_SSH_PORT=$port
-  export SERVICE_REMOTEDEV_PREVILEGED=false
+  export SERVICE_REMOTEDEV_PREVILEGED=true
 
   # @TODO workspace is a service, how to recognize it?
   # use a file in config dir
