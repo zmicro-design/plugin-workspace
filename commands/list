@@ -11,12 +11,13 @@ core() {
     exit 0
   fi
 
-  local services=$(ls $ZMICRO_PLUGINS_CONFIGS_PATH/service/config)
-  if [ ! -d $services ]; then
+  local services_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config
+  if [ ! -d "$services_path" ]; then
     log::info "No workspaces found"
     exit 0
   fi
 
+  local services=$(ls $services_path)
   local workspaces=""
   for service in $services; do
     local workspace_file_path=$ZMICRO_PLUGINS_CONFIGS_PATH/service/config/$service/workspace
