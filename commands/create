@@ -79,6 +79,8 @@ core() {
 
   workspace::notify create >> /dev/null 2>&1 &
 
+  zmicro workspace ssh_key generate "$workspace" "$workspace@$company"
+
   zmicro service start $SERVICE_NAME
 }
 

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace ssh_keygen show <workspace>"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local workspace=$1
+  if [ -z "$workspace" ]; then
+    log::error "workspace name isrequired"
+    exit 1
+  fi
+
+  # show private key
+  zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa
+}
+
+run() {
+  core $@
+}
+
+run $@

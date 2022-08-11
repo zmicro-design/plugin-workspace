@@ -1,0 +1,29 @@
+#!/bin/bash
+
+load inquirer
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace add ssh_key <workspace>"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local workspace=$1
+  # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required 
+  if [ -z "$workspace" ]; then
+    workspace="-"
+  fi
+
+  zmicro workspace exec $workspace vim /home/workspace/.ssh/authorized_keys
+}
+
+run() {
+  core $@
+}
+
+run $@

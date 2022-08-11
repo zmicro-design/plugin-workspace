@@ -1,0 +1,39 @@
+#!/bin/bash
+
+help() {
+  echo "Usage:"
+  echo "  zworkspace generate <workspace> <username>"
+}
+
+core() {
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    help
+    exit 0
+  fi
+
+  local workspace=$1
+  local username=$2
+  # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required 
+  if [ -z "$workspace" ]; then
+    log::error "workspace name isrequired"
+    exit 1
+  fi
+
+  if [ -z "$username" ]; then
+    log::error "username isrequired"
+    exit 1
+  fi
+
+  # generate
+  zmicro workspace exec $workspace ssh-keygen -t RSA -C "$username" -f /home/workspace/.ssh/id_rsa -q
+  # authorize
+  zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa.pub >> /home/workspace/.ssh/authorized_keys
+  # show private key
+  zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa
+}
+
+run() {
+  core $@
+}
+
+run $@
