@@ -14,7 +14,7 @@ core() {
   local workspace=$1
   local company=$2
   local port=$3
-  
+
   if [ -z "$PLUGIN_WORKSPACE_USERNAME" ]; then
     workspace=$PLUGIN_WORKSPACE_USERNAME
   fi
@@ -23,13 +23,12 @@ core() {
     company=$PLUGIN_WORKSPACE_COMPANY
   fi
 
-   if [ -z "$PLUGIN_WORKSPACE_SSHPORT" ]; then
+  if [ -z "$PLUGIN_WORKSPACE_SSHPORT" ]; then
     port=$PLUGIN_WORKSPACE_SSHPORT
   fi
 
-
   if [ -z "$workspace" ]; then
-    os::inquirer workspace text "请输入用户名:" 
+    os::inquirer workspace text "请输入用户名:"
   fi
 
   local SERVICE_NAME=workspace_user_$workspace
@@ -43,11 +42,11 @@ core() {
   fi
 
   if [ -z "$company" ]; then
-    os::inquirer company text "请输入公司名:" 
+    os::inquirer company text "请输入公司名:"
   fi
 
   if [ -z "$port" ]; then
-    os::inquirer port text "请输入 SSH 端口号:" 
+    os::inquirer port text "请输入 SSH 端口号:"
   fi
 
   workspace::check_available $workspace $port
@@ -68,7 +67,7 @@ core() {
   if [ ! -f $WORKSPACE_FILE_PATH ]; then
     sudo mkdir -p $SERVICE_CONFIG_DIR
     sudo chown -R $USER $SERVICE_CONFIG_DIR
-    echo $workspace@$company > $WORKSPACE_FILE_PATH
+    echo $workspace@$company >$WORKSPACE_FILE_PATH
   fi
 
   echo "SERVICE_REMOTEDEV_COMPANY: $SERVICE_REMOTEDEV_COMPANY"
@@ -77,11 +76,12 @@ core() {
   echo "SERVICE_REMOTEDEV_SSH_PORT: $SERVICE_REMOTEDEV_SSH_PORT"
   echo "SERVICE_REMOTEDEV_PREVILEGED: $SERVICE_REMOTEDEV_PREVILEGED"
 
-  workspace::notify create >> /dev/null 2>&1 &
-
-  zmicro workspace ssh_key generate "$workspace" "$workspace@$company"
+  workspace::notify create >>/dev/null 2>&1 &
 
   zmicro service start $SERVICE_NAME
+
+  # export SERVICE_STATUS=CREATE
+  # zmicro workspace ssh_key generate "$workspace" "$workspace@$company"
 }
 
 run() {

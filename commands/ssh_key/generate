@@ -13,7 +13,7 @@ core() {
 
   local workspace=$1
   local username=$2
-  # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required 
+  # inquirer::text "Enter ssh key" ssh_key "" "value is required" inquirer::required
   if [ -z "$workspace" ]; then
     log::error "workspace name isrequired"
     exit 1
@@ -25,9 +25,15 @@ core() {
   fi
 
   # generate
-  zmicro workspace exec $workspace ssh-keygen -t RSA -C "$username" -f /home/workspace/.ssh/id_rsa -q
+  zmicro workspace exec $workspace ssh-keygen -q -t RSA -C "$username" -f /home/workspace/.ssh/id_rsa
+  # # check or create .ssh dir
+  zmicro workspace exec $workspace mkdir -p /home/workspace/.ssh
   # authorize
-  zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa.pub >> /home/workspace/.ssh/authorized_keys
+  if [ "$SERVICE_STATUS" = "CREATE" ]; then
+    zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa.pub >/home/workspace/.ssh/authorized_keys
+  else
+    zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa.pub >>/home/workspace/.ssh/authorized_keys
+  fi
   # show private key
   zmicro workspace exec $workspace cat /home/workspace/.ssh/id_rsa
 }
