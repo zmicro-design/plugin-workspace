@@ -23,7 +23,7 @@ initialize_common() {
   zmicro package install zsh
   zmicro package install vim
   zmicro package install tmux
-  zmicro package install docker
+  # zmicro package install docker
   # zmicro package install inlets
 }
 
