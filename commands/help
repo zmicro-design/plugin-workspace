@@ -1,0 +1,61 @@
+#!/bin/bash
+
+name() {
+  local version=$(plugin::get_version $PLUGIN_WORKSPACE_NAME)
+  echo "Workspace ($(color::success $version))"
+}
+
+description() {
+  # @TODO
+  config::load_file $PLUGIN_DIR/mod
+
+  echo "$PLUGIN_DESCRIPTION"
+}
+
+usage() {
+  echo "Usage: workspace <command> [args...]"
+  echo ""
+  echo "Commands:"
+  echo "  本地开发环境:"
+  echo "  env "
+  echo "      setup <role>      - Setup development environment by role"
+  echo "            nodejs | go | deno | rust | python | all"
+  echo ""
+  echo "      initialize <role> - Alias of setup"
+  echo "      upgrade           - Upgrade development environment"
+  echo ""
+  echo "  沙盒服务环境:"
+  echo "  create [workspace] [company] [port]    - Create a workspace service"
+  echo "  start [workspace]                      - Start a workspace service"
+  echo "  stop [workspace]                       - Stop a workspace service"
+  echo "  status [workspace]                     - View a workspace service status"
+  echo "  exec [workspace]                       - Enter a workspace service shell"
+  echo "  upgrade [workspace]                    - Upgrade a workspace service"
+  echo "  ls                                     - List all workspaces"
+  echo ""
+  echo "  SSH KEY:"
+  echo "  ssh_key "
+  echo "    add <workspace>                      - Add ssh key to a workspace service"
+  echo "    generate <workspace>                 - Generate ssh key to a workspace service"
+  echo "    show <workspace>                     - Show the ssh key of a workspace service"
+  echo ""
+  echo "  系统相关"
+  echo "  info                - Show system info"
+  echo "  update              - Update CLI"
+  echo "  version             - Show version"
+  echo "  help                - Show help"
+}
+
+core() {
+  name
+  echo ""
+  description
+  echo ""
+  usage
+}
+
+run() {
+  core $@
+}
+
+run $@

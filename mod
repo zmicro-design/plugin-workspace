@@ -1,5 +1,5 @@
 PLUGIN_NAME=workspace
-PLUGIN_DESCRIPTION="zmicro workspace plugin"
+PLUGIN_DESCRIPTION="Development Workspace"
 PLUGIN_VERSION=v1.5.3
 
 DEPENDENCIES=(
